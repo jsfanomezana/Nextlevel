@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision Content System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Playfair+Display:ital@1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F7F6EF;
+    --cream-2:#EFEDE4;
+    --panel:#FFFFFF;
+    --ink:#1A1A17;
+    --ink-dim:#5A5952;
+    --muted:#9A978E;
+    --orange:#F0562A;
+    --orange-soft:rgba(240,86,42,0.10);
+    --line:#DDD9CD;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:900px; margin:0 auto; padding:0 28px;}
+  .narrow{max-width:620px; margin:0 auto;}
+
+  .display{
+    font-family:'Archivo', sans-serif; font-weight:800;
+    text-transform:uppercase; line-height:0.94; letter-spacing:-0.02em;
+    font-size:clamp(38px,8.5vw,84px);
+  }
+  .display .it{
+    font-family:'Playfair Display', serif; font-style:italic; font-weight:400;
+    text-transform:none; color:var(--orange); letter-spacing:0;
+  }
+  h2.sec{
+    font-family:'Archivo', sans-serif; font-weight:800;
+    text-transform:uppercase; line-height:0.98; letter-spacing:-0.02em;
+    font-size:clamp(30px,5.5vw,52px); margin-bottom:22px;
+  }
+  h2.sec .it{font-family:'Playfair Display', serif; font-style:italic; font-weight:400; text-transform:none; color:var(--orange);}
+  h3{font-family:'Archivo',sans-serif; font-weight:700; font-size:20px; letter-spacing:-0.01em; margin-bottom:8px;}
+
+  p{font-size:17px; color:var(--ink-dim); margin-bottom:16px;}
+  .lead{font-size:19px; color:var(--ink); font-weight:500;}
+  strong{color:var(--ink); font-weight:600;}
+  em{font-style:normal; color:var(--orange); font-weight:500;}
+  .accent{color:var(--orange);}
+
+  .targetline{
+    font-family:'Archivo',sans-serif; font-size:12.5px; letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--orange); font-weight:700; margin-bottom:22px;
+    display:inline-flex; align-items:center; gap:10px;
+  }
+  .targetline::before,.targetline::after{content:""; width:22px; height:2px; background:var(--orange); border-radius:2px; opacity:.5;}
+
+  .eyebrow{
+    font-family:'Archivo',sans-serif; font-size:12px; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--muted); font-weight:700; margin-bottom:16px;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .step{
+    font-family:'Archivo',sans-serif; font-size:12px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--muted); font-weight:700; margin-bottom:14px;
+  }
+
+  .cta{
+    display:inline-block; background:var(--orange); color:#FFF;
+    font-family:'Archivo',sans-serif; font-weight:600; font-size:16px;
+    padding:15px 34px; border-radius:99px; text-decoration:none; border:none; cursor:pointer;
+    transition:transform .16s ease, background .2s ease;
+  }
+  .cta:hover{transform:translateY(-2px); background:#E0491F;}
+  .cta:focus-visible{outline:2px solid var(--ink); outline-offset:3px;}
+  .cta.block{display:block; width:100%; max-width:340px; text-align:center; margin:0 auto;}
+  .cta.ghost{background:transparent; color:var(--orange); border:1.5px solid var(--orange);}
+  .cta.ghost:hover{background:var(--orange); color:#FFF;}
+  .cta-sub{font-size:13.5px; color:var(--muted); margin-top:14px;}
+
+  /* inline mid-CTA row */
+  .midcta{margin:34px 0 6px; text-align:center;}
+  .midcta .hint{font-family:'Archivo',sans-serif; font-size:13px; letter-spacing:0.02em; color:var(--ink); font-weight:600; margin-bottom:14px;}
+
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(247,246,239,0.92); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .inner{max-width:900px; margin:0 auto; padding:11px 28px; display:flex; align-items:center; justify-content:space-between; gap:16px;}
+  .brand{font-family:'Archivo',sans-serif; font-weight:800; font-size:15px; letter-spacing:0.04em; display:flex; align-items:center; gap:8px; text-transform:uppercase;}
+  .brand::before{content:"\273B"; color:var(--orange);}
+  .nav-cd{display:flex; align-items:center; gap:14px;}
+  .nav-avail{font-size:11.5px; color:var(--ink-dim); text-align:right; line-height:1.25; font-weight:500;}
+  .nav-avail b{display:block; color:var(--orange); font-weight:700; font-size:11px;}
+  .cd{display:flex; align-items:center; gap:4px;}
+  .cd .u{background:var(--ink); color:var(--cream); border-radius:8px; padding:5px 7px; min-width:34px; text-align:center;}
+  .cd .u .n{font-family:'Archivo',sans-serif; font-size:15px; font-weight:800; line-height:1; display:block; font-variant-numeric:tabular-nums;}
+  .cd .u .l{font-size:8px; text-transform:uppercase; letter-spacing:0.05em; color:#B7B2A0; margin-top:2px;}
+  .cd .sep{color:var(--muted); font-weight:800;}
+  .nav-over{font-size:12px; color:var(--orange); font-weight:700;}
+  @media (max-width:560px){
+    nav .inner{padding:10px 20px;}
+    .brand{font-size:13px;}
+    .nav-avail{font-size:10.5px;} .cd .u{min-width:28px; padding:4px 5px;} .cd .u .n{font-size:13px;}
+  }
+
+  .hero{padding:60px 0 56px; text-align:center;}
+  .hero .lead{max-width:520px; margin:26px auto 30px;}
+
+  section{padding:64px 0; border-top:1px solid var(--line);}
+  section.alt{background:var(--cream-2);}
+
+  .faq-item{border:1px solid var(--line); border-radius:14px; background:var(--panel); margin-bottom:12px; overflow:hidden;}
+  .faq-item summary{
+    list-style:none; cursor:pointer; padding:18px 20px;
+    font-family:'Archivo', sans-serif; font-weight:700; font-size:16px;
+    display:flex; justify-content:space-between; align-items:center; gap:16px;
+  }
+  .faq-item summary::-webkit-details-marker{display:none;}
+  .faq-item summary::after{
+    content:'+'; font-size:22px; color:var(--orange); font-weight:400; flex-shrink:0;
+    transition:transform .2s ease;
+  }
+  .faq-item[open] summary::after{transform:rotate(45deg);}
+  .faq-item p{padding:0 20px 18px; color:var(--ink-dim); font-size:15px;}
+
+  .punch{font-size:18px; color:var(--ink); margin-bottom:12px; font-weight:500;}
+  .punch.dim{color:var(--ink-dim); font-weight:400;}
+  .punch.big{font-family:'Archivo',sans-serif; font-size:21px; font-weight:700; letter-spacing:-0.01em; line-height:1.25;}
+
+  .simple-list{list-style:none; margin:22px 0;}
+  .simple-list li{
+    padding:14px 0 14px 38px; position:relative; font-size:16.5px; color:var(--ink);
+    border-bottom:1px solid var(--line);
+  }
+  .simple-list li:last-child{border-bottom:none;}
+  .simple-list li::before{
+    content:"\2192"; position:absolute; left:0; top:14px; color:#FFF; background:var(--orange);
+    width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:13px; font-weight:700;
+  }
+  .simple-list li b{color:var(--orange); font-weight:600;}
+
+  .cross-list{list-style:none; margin:16px 0;}
+  .cross-list li{padding:9px 0 9px 28px; position:relative; font-size:16.5px; color:var(--ink-dim);}
+  .cross-list li::before{content:"\2715"; position:absolute; left:0; color:var(--muted); font-weight:700;}
+
+  .keyidea{
+    font-family:'Playfair Display',serif; font-style:italic; font-size:clamp(22px,3.6vw,30px);
+    line-height:1.35; color:var(--ink); margin:26px 0; padding-left:22px; border-left:3px solid var(--orange);
+  }
+  .keyidea .accent{color:var(--orange);}
+
+  .notif-stack{margin:26px 0;}
+  .notif{
+    background:var(--panel); border:1px solid var(--line); border-radius:16px;
+    padding:15px 18px; display:flex; align-items:center; gap:13px; margin-bottom:10px;
+  }
+  .notif .av{
+    width:36px; height:36px; border-radius:50%; flex-shrink:0; background:var(--orange);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Archivo',sans-serif; font-weight:800; font-size:15px; color:#FFF;
+  }
+  .notif .txt{font-size:14px; color:var(--ink-dim); line-height:1.4;}
+  .notif .txt b{color:var(--ink); font-weight:600;}
+
+  .stats{display:flex; gap:14px; margin:26px 0; flex-wrap:wrap;}
+  .stat{flex:1; min-width:150px; text-align:center; padding:24px 12px; background:var(--panel); border:1px solid var(--line); border-radius:18px;}
+  .stat .num{font-family:'Archivo',sans-serif; font-size:44px; font-weight:900; color:var(--ink); display:block; line-height:1;}
+  .stat .num .s{color:var(--orange);}
+  .stat .desc{font-size:12.5px; color:var(--muted); margin-top:8px; text-transform:uppercase; letter-spacing:0.05em; font-weight:500;}
+
+  .photo-slot{
+    border:1.5px dashed var(--line); border-radius:18px; background:var(--panel);
+    padding:44px 20px; text-align:center; color:var(--muted); font-size:13.5px; margin:14px 0;
+  }
+  .photo-slot .ico{font-size:22px; display:block; margin-bottom:9px; color:var(--orange); opacity:.85;}
+  .photo-slot span{display:block; color:#B7B2A0; font-size:11.5px; margin-top:7px;}
+
+  .proof-shot{margin:14px 0; border:1px solid var(--line); border-radius:18px; background:var(--panel); overflow:hidden;}
+  .proof-shot img{display:block; width:100%; height:auto;}
+  .proof-shot figcaption{padding:10px 16px; font-size:12.5px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; font-weight:600;}
+
+  .proof-gallery{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:20px 0;}
+  .proof-gallery figure{margin:0; border:1px solid var(--line); border-radius:14px; background:var(--panel); overflow:hidden;}
+  .proof-gallery img{display:block; width:100%; height:100%; aspect-ratio:9/16; object-fit:cover;}
+  @media (max-width:560px){ .proof-gallery{grid-template-columns:repeat(2,1fr);} }
+
+  .format{display:flex; gap:14px; margin:26px 0; flex-wrap:wrap;}
+  .format .fcard{
+    flex:1; min-width:180px; background:var(--panel); border:1px solid var(--line); border-radius:18px;
+    padding:24px 22px;
+  }
+  .format .fico{
+    width:44px; height:44px; border-radius:12px; background:var(--orange-soft);
+    display:flex; align-items:center; justify-content:center; margin-bottom:14px;
+    color:var(--orange); font-size:22px;
+  }
+  .format h3{margin-bottom:6px;}
+  .format p{font-size:15px; margin-bottom:0; color:var(--ink-dim);}
+
+  .bonus{background:var(--panel); border:1px solid var(--line); border-radius:20px; padding:28px 24px; margin:26px 0;}
+  .bonus .btag{font-family:'Archivo',sans-serif; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:var(--orange); font-weight:700; margin-bottom:14px;}
+  .bonus ul{list-style:none;}
+  .bonus li{padding:9px 0 9px 28px; position:relative; font-size:16px; color:var(--ink); font-weight:500;}
+  .bonus li::before{content:"+"; position:absolute; left:0; color:var(--orange); font-weight:800; font-size:19px;}
+
+  .price-box{
+    text-align:center; margin:8px 0; border:1px solid var(--line); border-radius:24px;
+    padding:44px 26px; background:var(--panel); box-shadow:0 30px 60px -40px rgba(26,26,23,0.35);
+  }
+  .price-box .step{margin-bottom:10px;}
+  .price-old{font-family:'Archivo',sans-serif; font-size:22px; font-weight:600; color:var(--muted); text-decoration:line-through; text-decoration-color:var(--orange); margin-bottom:2px;}
+  .price{font-family:'Archivo',sans-serif; font-size:clamp(48px,10vw,66px); font-weight:900; color:var(--ink); line-height:1; margin-bottom:4px;}
+  .price .cur{font-size:24px; color:var(--orange); vertical-align:super; margin-right:5px; font-weight:700;}
+  .price-note{color:var(--muted); font-size:14px; margin-bottom:28px;}
+  .price-box .cta{margin-bottom:26px;}
+  .pay-line{font-size:14px; color:var(--ink-dim); padding-top:22px; border-top:1px solid var(--line);}
+  .pay-line .plabel{font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:7px;}
+  .pay-line .num{font-family:'Archivo',sans-serif; font-size:24px; color:var(--ink); font-weight:800; letter-spacing:0.03em;}
+
+  .cd-block{
+    background:var(--ink); color:var(--cream); border-radius:20px; padding:26px 22px;
+    text-align:center; margin:0 0 20px;
+  }
+  .cd-block .cdb-title{font-family:'Archivo',sans-serif; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:var(--orange); font-weight:700; margin-bottom:6px;}
+  .cd-block .cdb-avail{font-size:13.5px; color:#C9C6BB; margin-bottom:18px;}
+  .cd-block .cdb-avail b{color:var(--cream); font-weight:600;}
+  .cdb-grid{display:flex; justify-content:center; gap:10px;}
+  .cdb-u{min-width:64px;}
+  .cdb-u .n{font-family:'Archivo',sans-serif; font-size:34px; font-weight:900; line-height:1; display:block; font-variant-numeric:tabular-nums; background:rgba(255,255,255,0.07); border-radius:12px; padding:12px 6px;}
+  .cdb-u .l{font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:#8F8C82; margin-top:8px;}
+  .cdb-over{font-family:'Archivo',sans-serif; font-size:18px; font-weight:800; color:var(--orange);}
+  @media (max-width:420px){ .cdb-u{min-width:52px;} .cdb-u .n{font-size:26px;} }
+
+  .final{text-align:center; padding:76px 0 84px;}
+  .final .narrow p{margin-bottom:16px;}
+
+  .sig{
+    text-align:center; padding:38px 0 10px;
+  }
+  .sig .sig-mark{font-family:'Playfair Display',serif; font-style:italic; font-size:26px; color:var(--ink); margin-bottom:4px;}
+  .sig .sig-mark b{color:var(--orange); font-style:normal; font-family:'Archivo',sans-serif; font-weight:800; text-transform:uppercase; letter-spacing:0.02em;}
+  .sig .sig-sub{font-size:12.5px; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; font-family:'Archivo',sans-serif; font-weight:600;}
+
+  footer{text-align:center; padding:24px 0 48px; color:#B7B2A0; font-size:12px; letter-spacing:0.06em;}
+  footer .gold{color:var(--orange);}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="inner">
+    <div class="brand">Next Level System</div>
+    <div class="nav-cd">
+      <div class="nav-avail"><b>Dispo 27/07 &middot; 16:00</b>Places limitees</div>
+      <div class="cd" id="cd">
+        <div class="u"><span class="n" id="cd-d">00</span><span class="l">j</span></div>
+        <span class="sep">:</span>
+        <div class="u"><span class="n" id="cd-h">00</span><span class="l">h</span></div>
+        <span class="sep">:</span>
+        <div class="u"><span class="n" id="cd-m">00</span><span class="l">m</span></div>
+        <span class="sep">:</span>
+        <div class="u"><span class="n" id="cd-s">00</span><span class="l">s</span></div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<section class="hero" style="border-top:none;">
+  <div class="wrap">
+    <div class="targetline">Coachs, infopreneurs &amp; freelances qui postent dans le vide</div>
+    <h1 class="display">Transforme tes posts en <span class="it">machine</span> a prospects</h1>
+    <p class="lead narrow">Comment j'ai transforme mes publications en machine qui genere des conversations &mdash; sans jamais ecrire &laquo; DM-moi &raquo;. Arrete de poster pour etre vu. Poste pour vendre.</p>
+    <a href="#prix" class="cta">Je veux le systeme</a>
+    <div class="cta-sub">Acces des le 27/07 a 16h &middot; 97 000 Ar &middot; paiement unique</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <div class="step">01 &mdash; Le constat</div>
+    <h2 class="sec">Tu postes. Et <span class="it">rien</span> ne se passe.</h2>
+    <p class="punch big">40 minutes sur un post. La bonne photo. La bonne accroche. La &laquo; bonne heure &raquo;.</p>
+    <p class="punch dim">Et le resultat tombe : 3 likes. Aucun message. Le silence.</p>
+    <p>Tu recommences le lendemain. Puis le surlendemain. En te demandant, a chaque fois, ce que tu fais de travers.</p>
+    <p class="punch">La verite ? T'as aucun probleme de discipline. Ton contenu attire des yeux &mdash; <strong>mais pas des decisions.</strong> Et je vais te montrer exactement pourquoi.</p>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap narrow">
+    <div class="step">02 &mdash; Le paradoxe</div>
+    <h2 class="sec">Le conseil qui te <span class="it">ruine</span> en silence.</h2>
+    <p>&laquo; Donne de la valeur. Donne, donne, donne. Eduque ton audience et les ventes vont suivre. &raquo; On te l'a repete mille fois.</p>
+    <p class="punch big">Sauf que c'est exactement ce conseil qui te garde fauche.</p>
+    <p>Plus tu donnes gratuitement, plus tu construis une audience qui adore apprendre de toi&hellip; et qui n'achete jamais. Tu deviens leur formation gratuite. Pas leur coach.</p>
+    <div class="keyidea">Le contenu de valeur remplit les cerveaux. Il ne remplit pas ton agenda.</div>
+    <p class="punch">Si tu veux enfin <strong>vendre et scaler</strong>, il te faut un autre type de contenu. Un contenu qui pousse a <em>decider</em> &mdash; pas juste a liker.</p>
+    <div class="midcta">
+      <a href="#prix" class="cta ghost">Montre-moi ce contenu &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <div class="step">03 &mdash; Le vrai probleme</div>
+    <h2 class="sec">C'est pas ton contenu. C'est sa <span class="it">structure</span>.</h2>
+    <p>Regarde tes derniers posts. Ils tombent presque tous dans un de ces deux pieges :</p>
+    <ul class="cross-list">
+      <li>La valeur pure qui informe&hellip; mais ne pousse a rien</li>
+      <li>La promo directe que ton audience scrolle sans meme ralentir</li>
+    </ul>
+    <p class="punch big">Il manque une seule piece a chaque fois.</p>
+    <p><strong>Un declic qui fait passer ton lecteur du like automatique a la vraie decision</strong> &mdash; commenter, reagir, lever la main pour dire &laquo; moi, ca m'interesse &raquo;. C'est cette piece que la plupart ignorent. Et c'est tout ce qui separe un post qui dort d'un post qui vend.</p>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap narrow">
+    <div class="step">04 &mdash; La solution</div>
+    <h2 class="sec">Arrete de publier du contenu. Publie des <span class="it">decisions</span>.</h2>
+    <div class="keyidea">Chaque post devient un petit chemin vers une decision &mdash; pas juste un message de plus.</div>
+    <p>Une accroche qui trie. Une partie qui reveille le besoin. Un positionnement qui fait de toi le choix evident. Un appel a l'action qui transforme la curiosite en conversation.</p>
+    <p class="punch">Le resultat ? Les bonnes personnes commentent, puis t'ecrivent en DM &mdash; <em>et elles sont deja a moitie convaincues.</em></p>
+    <div class="midcta">
+      <div class="hint">C'est exactement ce que tu vas installer.</div>
+      <a href="#prix" class="cta">Je veux ce systeme</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <div class="step">05 &mdash; Projection</div>
+    <h2 class="sec">Imagine, dans <span class="it">30 jours</span>&hellip;</h2>
+    <p>Tu ouvres ton telephone le matin. Et cette fois, c'est pas des likes anonymes qui t'attendent. C'est des <strong>noms</strong>. Des vraies personnes, pretes a parler.</p>
+    <div class="notif-stack">
+      <div class="notif"><span class="av">H</span><span class="txt"><b>Hanta R.</b> &mdash; &laquo; Coucou, je veux en savoir plus sur ton programme &raquo;</span></div>
+      <div class="notif"><span class="av">N</span><span class="txt"><b>Njaka M.</b> &mdash; &laquo; c'est exactement mon cas, on fait comment ? &raquo;</span></div>
+      <div class="notif"><span class="av">F</span><span class="txt"><b>Fara A.</b> &mdash; &laquo; Ca m'interesse, tu prends encore des clients ? &raquo;</span></div>
+    </div>
+    <p class="punch">Tu ne cours plus apres les ventes. Ce sont les conversations qui viennent a toi.</p>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap narrow">
+    <div class="step">06 &mdash; Preuve</div>
+    <h2 class="sec">Pas de la theorie. Des <span class="it">resultats</span>.</h2>
+    <div class="stats">
+      <div class="stat"><span class="num">5<span class="s">M</span></span><span class="desc">vues generees</span></div>
+      <div class="stat"><span class="num">2M<span class="s">Ar</span></span><span class="desc">/ mois &middot; digital</span></div>
+      <div class="stat"><span class="num">100<span class="s">+</span></span><span class="desc">commentaires / post</span></div>
+    </div>
+    <p>Et c'est pas un coup de chance. Ca se repete, post apres post, parce que tout repose sur une structure &mdash; pas sur l'inspiration du jour.</p>
+<div class="proof-gallery">
+      <figure><img src="image/IMG_20260722_182059.jpg" alt="Preuve resultat IMG_20260722_182059" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182125.jpg" alt="Preuve resultat IMG_20260722_182125" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182230.jpg" alt="Preuve resultat IMG_20260722_182230" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182401.jpg" alt="Preuve resultat IMG_20260722_182401" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182440.jpg" alt="Preuve resultat IMG_20260722_182440" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182528.jpg" alt="Preuve resultat IMG_20260722_182528" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182602.jpg" alt="Preuve resultat IMG_20260722_182602" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182634.jpg" alt="Preuve resultat IMG_20260722_182634" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182718.jpg" alt="Preuve resultat IMG_20260722_182718" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182833.jpg" alt="Preuve resultat IMG_20260722_182833" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182141.jpg" alt="Preuve resultat IMG_20260722_182141" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182204.jpg" alt="Preuve resultat IMG_20260722_182204" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182253.jpg" alt="Preuve resultat IMG_20260722_182253" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182412.jpg" alt="Preuve resultat IMG_20260722_182412" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182459.jpg" alt="Preuve resultat IMG_20260722_182459" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182540.jpg" alt="Preuve resultat IMG_20260722_182540" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182613.jpg" alt="Preuve resultat IMG_20260722_182613" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182652.jpg" alt="Preuve resultat IMG_20260722_182652" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182736.jpg" alt="Preuve resultat IMG_20260722_182736" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182846.jpg" alt="Preuve resultat IMG_20260722_182846" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182035.jpg" alt="Preuve resultat IMG_20260722_182035" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182216.jpg" alt="Preuve resultat IMG_20260722_182216" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182351.jpg" alt="Preuve resultat IMG_20260722_182351" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182425.jpg" alt="Preuve resultat IMG_20260722_182425" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182510.jpg" alt="Preuve resultat IMG_20260722_182510" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182550.jpg" alt="Preuve resultat IMG_20260722_182550" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182623.jpg" alt="Preuve resultat IMG_20260722_182623" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182708.jpg" alt="Preuve resultat IMG_20260722_182708" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182747.jpg" alt="Preuve resultat IMG_20260722_182747" loading="lazy"></figure>
+      <figure><img src="image/IMG_20260722_182859.jpg" alt="Preuve resultat IMG_20260722_182859" loading="lazy"></figure>
+    </div>
+    <div class="midcta">
+      <a href="#prix" class="cta ghost">Je veux les memes resultats &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <div class="step">07 &mdash; Ce que tu vas apprendre</div>
+    <h2 class="sec">Ce qui t'attend a <span class="it">l'interieur</span></h2>
+
+    <div class="format">
+      <div class="fcard">
+        <div class="fico">&#9658;</div>
+        <h3>Des videos</h3>
+        <p>La methode expliquee etape par etape, en video, a regarder a ton rythme &mdash; simple a suivre, direct au but.</p>
+      </div>
+      <div class="fcard">
+        <div class="fico">&#9707;</div>
+        <h3>Des templates</h3>
+        <p>Des modeles de posts prets a copier-coller. Tu remplis, tu adaptes, tu publies. Zero page blanche.</p>
+      </div>
+    </div>
+
+    <ul class="simple-list">
+      <li>Les <b>erreurs que font 99% des coachs, infopreneurs et freelances</b> quand ils postent &mdash; et qui leur coutent des clients sans qu'ils s'en rendent compte</li>
+      <li>Les <b>mots exacts</b> que tes clients ont besoin d'entendre pour te suivre et te faire confiance</li>
+      <li>Les <b>4 declencheurs emotionnels</b> qui poussent ton prospect a passer a l'action et a te contacter</li>
+      <li>La <b>psychologie derriere les accroches</b> qui stoppent net le scroll de ton prospect</li>
+      <li>Comment ecrire des <b>Call to Action</b> qui donnent vraiment envie d'agir</li>
+      <li>Le <b>seul type de contenu</b> qui pousse tes clients a agir au lieu de juste liker</li>
+    </ul>
+    <div class="bonus">
+      <div class="btag">En bonus, tu recois aussi</div>
+      <ul>
+        <li>Comment <strong>automatiser tes commentaires</strong> (DM / ManyChat)</li>
+        <li>Le <strong>calendrier de contenu 30 jours</strong> : quoi publier, et dans quel ordre</li>
+      </ul>
+    </div>
+    <div class="midcta">
+      <a href="#prix" class="cta">Je veux tout ca maintenant</a>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="prix">
+  <div class="wrap narrow">
+    <div class="step">08 &mdash; Investissement</div>
+    <h2 class="sec">Un <span class="it">systeme</span>, pas une formation.</h2>
+    <p>Tu changes pas de metier, tu recommences pas a zero. Tu prends le contenu que tu fais deja et tu le transformes en <strong>vraie machine a clients</strong>.</p>
+
+    <div class="cd-block">
+      <div class="cdb-title">Ton acces s'ouvre dans</div>
+      <div class="cdb-avail"><b>Disponible le 27/07/2026 a 16:00</b></div>
+      <div class="cdb-grid" id="cd2">
+        <div class="cdb-u"><span class="n" id="cd2-d">00</span><span class="l">Jours</span></div>
+        <div class="cdb-u"><span class="n" id="cd2-h">00</span><span class="l">Heures</span></div>
+        <div class="cdb-u"><span class="n" id="cd2-m">00</span><span class="l">Min</span></div>
+        <div class="cdb-u"><span class="n" id="cd2-s">00</span><span class="l">Sec</span></div>
+      </div>
+    </div>
+
+    <div class="price-box">
+      <div class="step">Acces complet</div>
+      <div class="price-old">147 000 Ar</div>
+      <div class="price"><span class="cur">Ar</span>97 000</div>
+      <div class="price-note">Paiement unique &middot; acces des le 27/07 a 16h</div>
+      <a href="#" class="cta block">Je demarre maintenant</a>
+      <div class="pay-line">
+        <span class="plabel">Paiement Mobile Money</span>
+        <span class="num">033 32 709 60</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap narrow">
+    <div class="step">09 &mdash; Questions</div>
+    <h2 class="sec">Avant de te <span class="it">decider</span>.</h2>
+
+    <details class="faq-item">
+      <summary>Est-ce que ca marche pour ma niche ?</summary>
+      <p>Le systeme repose sur une structure de contenu, pas sur ta niche. Que tu sois coach, infopreneur ou freelance, le meme mecanisme s'applique : une accroche qui trie, un besoin qu'on reveille, un positionnement clair, un CTA qui pousse a la conversation. Tu adaptes juste les mots a ton audience.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>Je debute, c'est fait pour moi ?</summary>
+      <p>Oui. Tu n'as pas besoin d'une grosse audience pour commencer. Le systeme te montre exactement quoi publier et dans quel ordre, avec des templates prets a l'emploi. Tu n'as pas a inventer ta structure de zero.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>Combien de temps avant de voir des resultats ?</summary>
+      <p>Certains voient une difference des les premiers posts publies avec la nouvelle structure, car le declic (accroche + decision) change immediatement la facon dont ton audience reagit. Pour des resultats reguliers, compte sur le calendrier de contenu 30 jours inclus dans le systeme.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>C'est un format video, un PDF, quoi exactement ?</summary>
+      <p>Tu recois des videos etape par etape a ton rythme, des templates de posts prets a copier-coller, et deux bonus : l'automatisation de tes commentaires (DM / ManyChat) et un calendrier de contenu sur 30 jours.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>Comment se passe le paiement ?</summary>
+      <p>Paiement unique de 97 000 Ar via Mobile Money, au numero 033 32 709 60. Pas d'abonnement, pas de frais caches. Ton acces s'ouvre le 27/07/2026 a 16h00.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>Et si ca ne me convient pas ?</summary>
+      <p>Ecris-nous directement apres ton achat si le systeme ne correspond pas a ce que tu attendais &mdash; on regarde ta situation ensemble avant tout.</p>
+    </details>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap narrow">
+    <h2 class="sec">Poster dans le <span class="it">vide</span>. Ou qu'on te reponde.</h2>
+    <p>Imagine ouvrir ton telephone et voir des noms, pas des vues. Des gens qui ont decide, tout seuls, de venir te parler.</p>
+    <p class="punch">Ton contenu fait le boulot a ta place. A toi de choisir maintenant.</p>
+    <a href="#prix" class="cta" style="margin-top:20px;">Je veux ce systeme</a>
+  </div>
+</section>
+
+<div class="sig">
+  <div class="sig-mark">Signe <b>Next Level System</b></div>
+  <div class="sig-sub">Decision Content System</div>
+</div>
+
+<footer>
+  DECISION CONTENT SYSTEM &middot; <span class="gold">97 000 AR</span> &middot; MOBILE MONEY 033 32 709 60
+</footer>
+
+<script>
+  (function(){
+    var deadline = new Date("2026-07-27T16:00:00").getTime();
+    var d=document.getElementById("cd-d"), h=document.getElementById("cd-h"),
+        m=document.getElementById("cd-m"), s=document.getElementById("cd-s"),
+        grid=document.getElementById("cd");
+    var d2=document.getElementById("cd2-d"), h2=document.getElementById("cd2-h"),
+        m2=document.getElementById("cd2-m"), s2=document.getElementById("cd2-s"),
+        grid2=document.getElementById("cd2");
+    function pad(n){return (n<10?"0":"")+n;}
+    function tick(){
+      var diff = deadline - Date.now();
+      if(diff<=0){
+        if(grid) grid.innerHTML = '<span class="nav-over">Acces ouvert</span>';
+        if(grid2) grid2.innerHTML = '<span class="cdb-over">Acces ouvert</span>';
+        return;
+      }
+      var dd=pad(Math.floor(diff/86400000));
+      var hh=pad(Math.floor(diff%86400000/3600000));
+      var mm=pad(Math.floor(diff%3600000/60000));
+      var ss=pad(Math.floor(diff%60000/1000));
+      if(d){d.textContent=dd; h.textContent=hh; m.textContent=mm; s.textContent=ss;}
+      if(d2){d2.textContent=dd; h2.textContent=hh; m2.textContent=mm; s2.textContent=ss;}
+    }
+    tick(); setInterval(tick,1000);
+  })();
+</script>
+
+</body>
+</html>
