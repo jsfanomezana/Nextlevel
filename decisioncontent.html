@@ -117,20 +117,6 @@
   section{padding:64px 0; border-top:1px solid var(--line);}
   section.alt{background:var(--cream-2);}
 
-  .faq-item{border:1px solid var(--line); border-radius:14px; background:var(--panel); margin-bottom:12px; overflow:hidden;}
-  .faq-item summary{
-    list-style:none; cursor:pointer; padding:18px 20px;
-    font-family:'Archivo', sans-serif; font-weight:700; font-size:16px;
-    display:flex; justify-content:space-between; align-items:center; gap:16px;
-  }
-  .faq-item summary::-webkit-details-marker{display:none;}
-  .faq-item summary::after{
-    content:'+'; font-size:22px; color:var(--orange); font-weight:400; flex-shrink:0;
-    transition:transform .2s ease;
-  }
-  .faq-item[open] summary::after{transform:rotate(45deg);}
-  .faq-item p{padding:0 20px 18px; color:var(--ink-dim); font-size:15px;}
-
   .punch{font-size:18px; color:var(--ink); margin-bottom:12px; font-weight:500;}
   .punch.dim{color:var(--ink-dim); font-weight:400;}
   .punch.big{font-family:'Archivo',sans-serif; font-size:21px; font-weight:700; letter-spacing:-0.01em; line-height:1.25;}
@@ -188,10 +174,34 @@
   .proof-shot img{display:block; width:100%; height:auto;}
   .proof-shot figcaption{padding:10px 16px; font-size:12.5px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; font-weight:600;}
 
-  .proof-gallery{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:20px 0;}
-  .proof-gallery figure{margin:0; border:1px solid var(--line); border-radius:14px; background:var(--panel); overflow:hidden;}
-  .proof-gallery img{display:block; width:100%; height:100%; aspect-ratio:9/16; object-fit:cover;}
-  @media (max-width:560px){ .proof-gallery{grid-template-columns:repeat(2,1fr);} }
+  .proof-gallery{columns:3; column-gap:12px; margin:20px 0;}
+  .proof-gallery figure{margin:0 0 12px; border:1px solid var(--line); border-radius:14px; background:var(--panel); overflow:hidden; break-inside:avoid; display:block;}
+  .proof-gallery img{display:block; width:100%; height:auto;}
+  @media (max-width:560px){ .proof-gallery{columns:2;} }
+
+  .vs{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:28px 0;}
+  .vs .col{background:var(--panel); border:1px solid var(--line); border-radius:20px; padding:24px 20px; display:flex; flex-direction:column;}
+  .vs .col.new{border-color:var(--orange); box-shadow:0 20px 44px -34px rgba(240,86,42,0.6);}
+  .vs .vtag{
+    font-family:'Archivo',sans-serif; font-size:11px; letter-spacing:0.14em; text-transform:uppercase;
+    font-weight:700; color:var(--muted); margin-bottom:6px;
+  }
+  .vs .col.new .vtag{color:var(--orange);}
+  .vs .vname{font-family:'Archivo',sans-serif; font-weight:800; font-size:19px; line-height:1.2; margin-bottom:16px; letter-spacing:-0.01em;}
+  .vs ul{list-style:none; margin:0 0 18px;}
+  .vs li{padding:7px 0 7px 24px; position:relative; font-size:14.5px; color:var(--ink-dim); line-height:1.45;}
+  .vs .col.old li::before{content:"\2715"; position:absolute; left:0; color:var(--muted); font-weight:700;}
+  .vs .col.new li::before{content:"\2713"; position:absolute; left:0; color:var(--orange); font-weight:700;}
+  .vs .col.new li{color:var(--ink);}
+  .vs .res{margin-top:auto; padding-top:16px; border-top:1px solid var(--line);}
+  .vs .res-tag{font-family:'Archivo',sans-serif; font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase; font-weight:700; color:var(--muted); margin-bottom:10px;}
+  .vs .col.new .res-tag{color:var(--orange);}
+  .vs .res ul{margin:0;}
+  .vs .res li{font-size:14px; padding:5px 0 5px 20px;}
+  .vs .res li::before{content:"\2192"; left:0; font-weight:700;}
+  .vs .col.old .res li::before{color:var(--muted);}
+  .vs .col.new .res li::before{color:var(--orange);}
+  @media (max-width:600px){ .vs{grid-template-columns:1fr;} }
 
   .format{display:flex; gap:14px; margin:26px 0; flex-wrap:wrap;}
   .format .fcard{
@@ -260,7 +270,7 @@
   <div class="inner">
     <div class="brand">Next Level System</div>
     <div class="nav-cd">
-      <div class="nav-avail"><b>Dispo 27/07 &middot; 16:00</b>Places limitees</div>
+      <div class="nav-avail"><b>Dispo 27/07 &middot; 14:00</b>Offre limitee</div>
       <div class="cd" id="cd">
         <div class="u"><span class="n" id="cd-d">00</span><span class="l">j</span></div>
         <span class="sep">:</span>
@@ -280,7 +290,7 @@
     <h1 class="display">Transforme tes posts en <span class="it">machine</span> a prospects</h1>
     <p class="lead narrow">Comment j'ai transforme mes publications en machine qui genere des conversations &mdash; sans jamais ecrire &laquo; DM-moi &raquo;. Arrete de poster pour etre vu. Poste pour vendre.</p>
     <a href="#prix" class="cta">Je veux le systeme</a>
-    <div class="cta-sub">Acces des le 27/07 a 16h &middot; 97 000 Ar &middot; paiement unique</div>
+    <div class="cta-sub">Acces immediat &middot; 97 000 Ar &middot; paiement unique</div>
   </div>
 </section>
 
@@ -312,15 +322,16 @@
 
 <section>
   <div class="wrap narrow">
-    <div class="step">03 &mdash; Le vrai probleme</div>
-    <h2 class="sec">C'est pas ton contenu. C'est sa <span class="it">structure</span>.</h2>
-    <p>Regarde tes derniers posts. Ils tombent presque tous dans un de ces deux pieges :</p>
+    <div class="step">03 &mdash; Les vraies erreurs</div>
+    <h2 class="sec">Les 3 erreurs qui te gardent <span class="it">invisible</span>.</h2>
+    <p>Regarde tes derniers posts. Si tu ne recois aucun message, c'est presque toujours a cause de ces trois-la :</p>
     <ul class="cross-list">
-      <li>La valeur pure qui informe&hellip; mais ne pousse a rien</li>
-      <li>La promo directe que ton audience scrolle sans meme ralentir</li>
+      <li><strong>Tu donnes trop de valeur gratuite</strong> &mdash; et tu attires des gens qui consomment sans jamais sortir la carte</li>
+      <li><strong>Tes accroches sont molles</strong> &mdash; aucune curiosite, aucune emotion, rien qui arrete le pouce</li>
+      <li><strong>Tu te focalises sur les vues et les likes</strong> &mdash; des chiffres qui flattent l'ego mais ne remplissent pas ton compte</li>
     </ul>
-    <p class="punch big">Il manque une seule piece a chaque fois.</p>
-    <p><strong>Un declic qui fait passer ton lecteur du like automatique a la vraie decision</strong> &mdash; commenter, reagir, lever la main pour dire &laquo; moi, ca m'interesse &raquo;. C'est cette piece que la plupart ignorent. Et c'est tout ce qui separe un post qui dort d'un post qui vend.</p>
+    <p class="punch big">Le pire ? Tu peux faire ces trois erreurs pendant des annees sans t'en rendre compte.</p>
+    <p>Parce que tout le monde autour de toi fait pareil. Et tant que tu les repetes, <strong>tu peux publier tous les jours sans jamais declencher une seule vraie conversation.</strong></p>
   </div>
 </section>
 
@@ -331,6 +342,50 @@
     <div class="keyidea">Chaque post devient un petit chemin vers une decision &mdash; pas juste un message de plus.</div>
     <p>Une accroche qui trie. Une partie qui reveille le besoin. Un positionnement qui fait de toi le choix evident. Un appel a l'action qui transforme la curiosite en conversation.</p>
     <p class="punch">Le resultat ? Les bonnes personnes commentent, puis t'ecrivent en DM &mdash; <em>et elles sont deja a moitie convaincues.</em></p>
+
+    <p class="punch big" style="margin-top:34px;">Regarde la difference, cote a cote.</p>
+
+    <div class="vs">
+      <div class="col old">
+        <div class="vtag">Old way</div>
+        <div class="vname">La valeur pure</div>
+        <ul>
+          <li>Tu expliques, tu enseignes, tu donnes tout</li>
+          <li>Tu vises le maximum de vues et de likes</li>
+          <li>Des accroches sages, sans emotion</li>
+          <li>Tu attends que les gens viennent d'eux-memes</li>
+        </ul>
+        <div class="res">
+          <div class="res-tag">Le resultat</div>
+          <ul>
+            <li>Des gens pas prets a investir</li>
+            <li>Une audience qui mendie du gratuit</li>
+            <li>Du trafic non qualifie qui ne t'achetera jamais</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col new">
+        <div class="vtag">New way</div>
+        <div class="vname">Le Decision Content</div>
+        <ul>
+          <li>Tu fais ressentir le probleme avant de le resoudre</li>
+          <li>Tu vises les conversations, pas les vues</li>
+          <li>Des accroches qui creent la curiosite et l'emotion</li>
+          <li>Tu fais lever la main aux bonnes personnes</li>
+        </ul>
+        <div class="res">
+          <div class="res-tag">Le resultat</div>
+          <ul>
+            <li>Des clients qualifies, prets a payer</li>
+            <li>Des gens qui ont deja essaye et echoue</li>
+            <li>Des prospects touches qui veulent une vraie solution</li>
+            <li>Des clients prets a changer, maintenant</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
     <div class="midcta">
       <div class="hint">C'est exactement ce que tu vas installer.</div>
       <a href="#prix" class="cta">Je veux ce systeme</a>
@@ -357,10 +412,16 @@
     <div class="step">06 &mdash; Preuve</div>
     <h2 class="sec">Pas de la theorie. Des <span class="it">resultats</span>.</h2>
     <div class="stats">
-      <div class="stat"><span class="num">5<span class="s">M</span></span><span class="desc">vues generees</span></div>
+      <div class="stat"><span class="num">5,9<span class="s">M</span></span><span class="desc">vues generees</span></div>
       <div class="stat"><span class="num">2M<span class="s">Ar</span></span><span class="desc">/ mois &middot; digital</span></div>
       <div class="stat"><span class="num">100<span class="s">+</span></span><span class="desc">commentaires / post</span></div>
     </div>
+
+    <figure class="proof-shot">
+      <img src="image/5M.png" alt="Statistiques : 5 978 878 vues generees" loading="lazy">
+      <figcaption>5 978 878 vues &mdash; statistiques reelles</figcaption>
+    </figure>
+
     <p>Et c'est pas un coup de chance. Ca se repete, post apres post, parce que tout repose sur une structure &mdash; pas sur l'inspiration du jour.</p>
 <div class="proof-gallery">
       <figure><img src="image/IMG_20260722_182059.jpg" alt="Preuve resultat IMG_20260722_182059" loading="lazy"></figure>
@@ -446,8 +507,8 @@
     <p>Tu changes pas de metier, tu recommences pas a zero. Tu prends le contenu que tu fais deja et tu le transformes en <strong>vraie machine a clients</strong>.</p>
 
     <div class="cd-block">
-      <div class="cdb-title">Ton acces s'ouvre dans</div>
-      <div class="cdb-avail"><b>Disponible le 27/07/2026 a 16:00</b></div>
+      <div class="cdb-title">L'offre se termine dans</div>
+      <div class="cdb-avail"><b>Le fichier sera disponible le 27/07/2026 a 14:00</b></div>
       <div class="cdb-grid" id="cd2">
         <div class="cdb-u"><span class="n" id="cd2-d">00</span><span class="l">Jours</span></div>
         <div class="cdb-u"><span class="n" id="cd2-h">00</span><span class="l">Heures</span></div>
@@ -460,50 +521,13 @@
       <div class="step">Acces complet</div>
       <div class="price-old">147 000 Ar</div>
       <div class="price"><span class="cur">Ar</span>97 000</div>
-      <div class="price-note">Paiement unique &middot; acces des le 27/07 a 16h</div>
+      <div class="price-note">Paiement unique &middot; acces immediat</div>
       <a href="#" class="cta block">Je demarre maintenant</a>
       <div class="pay-line">
         <span class="plabel">Paiement Mobile Money</span>
         <span class="num">033 32 709 60</span>
       </div>
     </div>
-  </div>
-</section>
-
-<section id="faq">
-  <div class="wrap narrow">
-    <div class="step">09 &mdash; Questions</div>
-    <h2 class="sec">Avant de te <span class="it">decider</span>.</h2>
-
-    <details class="faq-item">
-      <summary>Est-ce que ca marche pour ma niche ?</summary>
-      <p>Le systeme repose sur une structure de contenu, pas sur ta niche. Que tu sois coach, infopreneur ou freelance, le meme mecanisme s'applique : une accroche qui trie, un besoin qu'on reveille, un positionnement clair, un CTA qui pousse a la conversation. Tu adaptes juste les mots a ton audience.</p>
-    </details>
-
-    <details class="faq-item">
-      <summary>Je debute, c'est fait pour moi ?</summary>
-      <p>Oui. Tu n'as pas besoin d'une grosse audience pour commencer. Le systeme te montre exactement quoi publier et dans quel ordre, avec des templates prets a l'emploi. Tu n'as pas a inventer ta structure de zero.</p>
-    </details>
-
-    <details class="faq-item">
-      <summary>Combien de temps avant de voir des resultats ?</summary>
-      <p>Certains voient une difference des les premiers posts publies avec la nouvelle structure, car le declic (accroche + decision) change immediatement la facon dont ton audience reagit. Pour des resultats reguliers, compte sur le calendrier de contenu 30 jours inclus dans le systeme.</p>
-    </details>
-
-    <details class="faq-item">
-      <summary>C'est un format video, un PDF, quoi exactement ?</summary>
-      <p>Tu recois des videos etape par etape a ton rythme, des templates de posts prets a copier-coller, et deux bonus : l'automatisation de tes commentaires (DM / ManyChat) et un calendrier de contenu sur 30 jours.</p>
-    </details>
-
-    <details class="faq-item">
-      <summary>Comment se passe le paiement ?</summary>
-      <p>Paiement unique de 97 000 Ar via Mobile Money, au numero 033 32 709 60. Pas d'abonnement, pas de frais caches. Ton acces s'ouvre le 27/07/2026 a 16h00.</p>
-    </details>
-
-    <details class="faq-item">
-      <summary>Et si ca ne me convient pas ?</summary>
-      <p>Ecris-nous directement apres ton achat si le systeme ne correspond pas a ce que tu attendais &mdash; on regarde ta situation ensemble avant tout.</p>
-    </details>
   </div>
 </section>
 
@@ -527,7 +551,7 @@
 
 <script>
   (function(){
-    var deadline = new Date("2026-07-27T16:00:00").getTime();
+    var deadline = new Date("2026-07-26T23:59:00").getTime();
     var d=document.getElementById("cd-d"), h=document.getElementById("cd-h"),
         m=document.getElementById("cd-m"), s=document.getElementById("cd-s"),
         grid=document.getElementById("cd");
@@ -538,8 +562,8 @@
     function tick(){
       var diff = deadline - Date.now();
       if(diff<=0){
-        if(grid) grid.innerHTML = '<span class="nav-over">Acces ouvert</span>';
-        if(grid2) grid2.innerHTML = '<span class="cdb-over">Acces ouvert</span>';
+        if(grid) grid.innerHTML = '<span class="nav-over">Offre terminee</span>';
+        if(grid2) grid2.innerHTML = '<span class="cdb-over">Offre terminee</span>';
         return;
       }
       var dd=pad(Math.floor(diff/86400000));
